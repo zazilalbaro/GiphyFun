@@ -1,13 +1,41 @@
-var gifButtons = ['puppy','crazy','runner','whatever','trip']
+var g = {
+	gifButtons: ['puppy','jump','crazy','yes','whatever','trip'],
 
-var displayButtons() {
-	for (var i=0; i<gifButtons.length; i++) {
-		$("#gifsGoHere").append("<input type="submit" class="gifButt"/>").attr(value=i);
-	}
-}
+    displayButtons: function(buttonsArray) {
+		for (var i=0; i<buttonsArray.length; i++) {
+			
+			var newButt = "<button class='gifButt' id='" + buttonsArray[i] + "' text='" + buttonsArray[i] + "'/>";
+
+			$("#gifsGoHere").append($(newButt)
+							.text(buttonsArray[i])
+							.on("click", function(){
+								buttonClicked(this);
+							})
+							);					
+		}
+	},
+
+	buttonClicked: function(buttonSelected){
+		var buttName = $(buttonSelected).attr("id");
+		
+		if (g.gifButtons.indexOf(buttName) !== -1) {
+    		existingButton(buttName);
+  		}
+ 		else if (buttName === "Submit"){
+    		addNewButton();
+  		};
+  	}
+
+
+
+}; // end of object
+
+$(document).ready(function(){
+	g.displayButtons(g.gifButtons);
+});
 
 $("#ButtIsReady").on("click", function() {
 	var userInput = $("#addButton").val().trim()
-	gifButtons.push(userInput);
-	console.log(window.gifButtons);
-})
+	g.gifButtons.push(userInput);
+	console.log(g.gifButtons);
+});
