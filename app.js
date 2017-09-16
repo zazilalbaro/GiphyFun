@@ -1,5 +1,5 @@
 var g = {
-	gifButtons: ['puppy','jump','crazy','yes','whatever','trip'],
+	gifButtons: ['run','pushup','hike','dance','yoga','plank','move'],
 
     displayButtons: function() {
 
@@ -83,11 +83,13 @@ $(document).ready(function(){
 	$("#buttIsReady").on("click", function() {
 		event.preventDefault();
 		var userInput = $("#addButton").val().trim()
-		console.log(userInput)
-		g.gifButtons.push(userInput);
-		console.log(g.gifButtons);
-		g.displayButtons();
-		$("#addButton").val(' ')
+		if (userInput.length != 0) {
+			console.log(userInput)
+			g.gifButtons.push(userInput);
+			console.log(g.gifButtons);
+			g.displayButtons();
+			$("#addButton").val(' ')
+		};
 	});
 
 });
