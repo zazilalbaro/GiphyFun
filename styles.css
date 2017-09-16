@@ -1,0 +1,13 @@
+.panel {
+	padding:30px;
+	background-color: #e6e6e6;
+	margin-bottom: 30px;
+}
+
+#addButton {
+	margin: 10px;
+}
+
+form {
+	text-align: center;
+}
