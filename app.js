@@ -1,30 +1,76 @@
 var g = {
 	gifButtons: ['puppy','jump','crazy','yes','whatever','trip'],
 
-    displayButtons: function(buttonsArray) {
-		for (var i=0; i<buttonsArray.length; i++) {
-			
-			var newButt = "<button class='gifButt' id='" + buttonsArray[i] + "' text='" + buttonsArray[i] + "'/>";
+    displayButtons: function() {
 
-			$("#gifsGoHere").append($(newButt)
-							.text(buttonsArray[i])
+    	$("#gifButtons").empty();
+
+		for (var i=0; i<this.gifButtons.length; i++) {
+			
+			var newButt = "<button class='gifButt' id='" + this.gifButtons[i] + "' text='" + this.gifButtons[i] + "'/>";
+
+			$("#gifButtons").append($(newButt)
+							.text(this.gifButtons[i])
 							.on("click", function(){
-								buttonClicked(this);
+								g.existingButton(this.id);
 							})
 							);					
 		}
 	},
 
-	buttonClicked: function(buttonSelected){
-		var buttName = $(buttonSelected).attr("id");
-		
-		if (g.gifButtons.indexOf(buttName) !== -1) {
-    		existingButton(buttName);
-  		}
- 		else if (buttName === "Submit"){
-    		addNewButton();
-  		};
-  	}
+  	existingButton: function(buttName) {
+  		console.log(buttName);
+  		$("#gifsGoHere").empty();
+
+  		var key = '&api_key=M9w9IawWBVc3z6eLiEnmJrVl3hDZWylk';
+  		var limit = '&limit=10';
+  		var rating = '&rating=pg';
+  		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+  						buttName +
+  						rating +
+  						key +
+  						limit;
+
+  		$.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+
+        .done(function(response) {
+			var results = response.data;
+			console.log(queryURL)
+        	console.log(results)
+
+        	if (response.data.length === 0){
+        		$("#gifsGoHere").append($("<p>").html("That's weird"));
+        	}
+        	else {
+	        	for (var i = 0; i < results.length; i++) {
+		        	
+		        	var rating = $("<p>").text("Rating: " + results[i].rating.toUpperCase());
+		        	var aGif = "<img id='" + i + "' static='true' src='" + results[i].images.fixed_height_still.url + "'>"
+		        
+
+		        	$("#gifsGoHere").append(rating)
+		        	$("#gifsGoHere").append(aGif)
+		        };
+
+		        $("img").on("click", function(){
+			        var id = $(this).attr("id");
+
+			        if ($(this).attr("static") === "true"){
+			          $(this).attr("src", results[id].images.fixed_height.url);
+			          $(this).attr("static", "false");
+			        }
+			        else {
+			          $(this).attr("src", results[id].images.fixed_height_still.url);
+			          $(this).attr("static", "true");
+			        };
+			    });
+			};
+        });
+  	},
+
 
 
 
@@ -32,10 +78,16 @@ var g = {
 
 $(document).ready(function(){
 	g.displayButtons(g.gifButtons);
-});
 
-$("#ButtIsReady").on("click", function() {
-	var userInput = $("#addButton").val().trim()
-	g.gifButtons.push(userInput);
-	console.log(g.gifButtons);
+
+	$("#buttIsReady").on("click", function() {
+		event.preventDefault();
+		var userInput = $("#addButton").val().trim()
+		console.log(userInput)
+		g.gifButtons.push(userInput);
+		console.log(g.gifButtons);
+		g.displayButtons();
+		$("#addButton").val(' ')
+	});
+
 });
