@@ -25,7 +25,7 @@ var g = {
   		var key = '&api_key=M9w9IawWBVc3z6eLiEnmJrVl3hDZWylk';
   		var limit = '&limit=10';
   		var rating = '&rating=pg';
-  		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+  		var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
   						buttName +
   						rating +
   						key +
